@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>Deep Session</h1>
+    <current-task-container />
     <task-list ref="taskList" @edit-task="selectTask" />
     <task-form :task="selectedTask" @task-updated="refreshTasks" />
   </div>
@@ -9,10 +10,12 @@
 <script>
 import TaskList from './components/TaskList.vue';
 import TaskForm from './components/TaskForm.vue';
+import CurrentTaskContainer from "@/components/CurrentTaskContainer.vue";
 
 export default {
   name: 'App',
   components: {
+    CurrentTaskContainer,
     TaskList,
     TaskForm
   },
