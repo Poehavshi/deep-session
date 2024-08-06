@@ -5,6 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi import HTTPException
 
 from .enum import TaskStatus
+from .filters import TaskFilter
 from .models import Task
 from .schemas import TaskCreate, TaskUpdate
 
@@ -28,8 +29,10 @@ async def get_task(db: AsyncSession, task_id: int):
     return task
 
 
-async def get_tasks(db: AsyncSession):
-    result = await db.execute(select(Task))
+async def get_tasks(db: AsyncSession, task_filter: TaskFilter):
+    query = select(Task)
+    query = task_filter.filter(query)
+    result = await db.execute(query)
     return result.scalars().all()
 
 
