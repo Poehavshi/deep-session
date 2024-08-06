@@ -1,6 +1,15 @@
 <template>
   <div class="task-container">
     <h2 class="task-header">Tasks</h2>
+    <div class="filter-container">
+      <label for="status-filter">Filter by status:</label>
+      <select v-model="selectedStatus" @change="fetchTasks">
+        <option value="">All</option>
+        <option value="pending">Pending</option>
+        <option value="in_work">In Work</option>
+        <option value="done">Done</option>
+      </select>
+    </div>
     <ul class="task-list">
       <li v-for="task in tasks" :key="task.id" class="task-item">
         <span :class="['task-text', task.status]" :style="{ textDecoration: task.status === 'done' ? 'line-through' : 'none' }">
@@ -18,7 +27,6 @@
     </ul>
   </div>
 </template>
-
 <script>
 import axios from 'axios';
 
@@ -27,6 +35,7 @@ export default {
   data() {
     return {
       tasks: [],
+      selectedStatus: '', // New data property for the status filter
     };
   },
   async mounted() {
@@ -35,7 +44,12 @@ export default {
   methods: {
     async fetchTasks() {
       try {
-        const response = await axios.get('http://localhost:8000/api/v1/tasks');
+        // Include the status filter in the query parameters
+        const response = await axios.get('http://localhost:8000/api/v1/tasks', {
+          params: {
+            status: this.selectedStatus || undefined, // Pass undefined if no status is selected to fetch all tasks
+          },
+        });
         this.tasks = response.data;
       } catch (error) {
         console.error('Failed to fetch tasks:', error);
@@ -76,7 +90,7 @@ export default {
         console.error('Failed to undo complete task:', error);
       }
     },
-  }
+  },
 };
 </script>
 
@@ -91,6 +105,10 @@ export default {
 .task-header {
   font-size: 24px;
   color: #333;
+  margin-bottom: 20px;
+}
+
+.filter-container {
   margin-bottom: 20px;
 }
 
