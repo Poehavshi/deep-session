@@ -1,22 +1,29 @@
 from pydantic import BaseModel, Field
+from typing import Optional
+from datetime import datetime
+
+from .enum import TaskStatus
 
 
 class TaskBase(BaseModel):
     text: str
-    done: bool
+    status: TaskStatus
 
 
 class TaskCreate(TaskBase):
-    pass
+    status: TaskStatus = TaskStatus.PENDING
 
 
 class TaskUpdate(TaskBase):
-    text: str | None = Field(None)
-    done: bool | None = Field(None)
+    text: Optional[str] = Field(None)
+    status: Optional[TaskStatus] = Field(None)
 
 
 class TaskRead(TaskBase):
     id: int
+    start_time: Optional[datetime]
+    end_time: Optional[datetime]
+    time_spent: int
 
     class Config:
         orm_mode = True
