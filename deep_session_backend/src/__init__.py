@@ -1,1 +1,1 @@
-from src.task.models import Task
+from .task.models import Task
