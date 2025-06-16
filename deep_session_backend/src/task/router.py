@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from fastapi_filter import FilterDepends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db.session import get_db
+from ..db.session import get_db
 from .filters import TaskFilter
 from .schemas import TaskCreate, TaskUpdate, TaskRead
 from .service import create_task_in_db, get_task, get_tasks, update_task_in_db, delete_task_in_db
